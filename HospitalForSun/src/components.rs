@@ -75,8 +75,8 @@ impl Paddle {
     pub fn new(side: Side) -> Paddle {
         Paddle {
             side: side,
-            width: 1000.0,
-            height: 1.0,
+            width: 16.0,
+            height: 4.0,
         }
     }
 }

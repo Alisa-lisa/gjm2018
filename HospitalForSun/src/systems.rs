@@ -1,9 +1,9 @@
 use amethyst::core::{Transform, Time};
-use amethyst::ecs::{Join, Read, ReadStorage, System, WriteStorage};
+use amethyst::ecs::{Join, Read, ReadStorage, System, WriteStorage, Entities};
 use amethyst::input::InputHandler;
 use components::{DropValue, Side, Health, HealthState, DropType, Paddle};
 use entities::{ARENA_WIDTH};
-
+use utils;
 
 pub struct PaddleMovement;
 
@@ -45,3 +45,35 @@ impl<'s> System<'s> for DropFall {
         
     }
 }
+
+pub struct Collide;
+
+impl<'s> System<'s> for Collide {
+    type SystemData = (
+        WriteStorage<'s, Paddle>,
+        WriteStorage<'s, DropValue>,
+        ReadStorage<'s, Transform>,
+        Entities<'s>
+        );
+
+    fn run(&mut self, (mut player, mut drops, pos, entities): Self::SystemData) {
+        for (d, t, e) in (&mut drops, &pos, &*entities).join() {
+            let d_x = t.translation[0];
+            let d_y = t.translation[1];
+            
+            for (p, p_coord) in (&mut player, &pos).join() {
+                let p_left = p_coord.translation[0] - p.width * 0.5;
+                let p_right = p_coord.translation[0] + p.width * 0.5;
+                let p_up = p_coord.translation[1] + p.height * 0.5;
+                if utils::is_colliding(d_x, d_y, p_left, p_right, p_up) {
+                    // update sun's health
+                    
+                    // destroy drop entity
+                    entities.delete(e);
+                }
+            }
+
+        }
+    }
+}
+
