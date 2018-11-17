@@ -13,8 +13,10 @@ impl<'a, 'b> SimpleState<'a, 'b> for Pong {
         let sprite_sheet_handle = entities::load_sprite_sheet(world);
 
         world.register::<components::Paddle>();
-        
-        entities::spawn_paddle(world, sprite_sheet_handle);
+        world.register::<components::DropValue>();
+
+        entities::spawn_paddle(world, sprite_sheet_handle.clone());
+        entities::spawn_drop(world, sprite_sheet_handle);
         entities::initialise_camera(world);
     }
 }

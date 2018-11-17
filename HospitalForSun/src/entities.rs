@@ -47,7 +47,8 @@ pub fn spawn_paddle(world: &mut World, sprite_sheet: SpriteSheetHandle) {
 pub fn spawn_drop(world: &mut World, sprite_sheet: SpriteSheetHandle) {
     let mut drop_obj = Transform::default();
     let y = ARENA_HEIGHT - 4.0;
-    drop_obj.translation = Vector3::new(RNG.lock().unwrap().gen_range(4.0, 796.0), y, 0.0);
+    //drop_obj.translation = Vector3::new(RNG.lock().unwrap().gen_range(4.0, 496.0), y, 0.0);
+    drop_obj.translation = Vector3::new(25.0, 25.0, 0.0);
     
     let sprite_render = SpriteRender {
         sprite_sheet: sprite_sheet,
