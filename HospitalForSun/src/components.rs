@@ -1,4 +1,5 @@
 use amethyst::ecs::{Component, VecStorage, DenseVecStorage};
+use utils;
 
 #[derive(Default, Debug)]
 pub struct Health {
@@ -35,20 +36,27 @@ impl Component for DropType {
     type Storage = DenseVecStorage<Self>;
 }
 
-#[derive(Default, Debug)]
-pub struct Position {
-    pub x: f32,
-    pub y: f32,
+pub struct DropValue {
+    pub value: i32,
+    pub drop_type: DropType,
+    pub width: f32,
+    pub height: f32,
+    pub velocity: f32,
 }
 
-impl Component for Position {
-    type Storage = DenseVecStorage<Self>;
+impl DropValue {
+    pub fn new(drop_type: DropType) -> DropValue {
+        DropValue {
+            value: utils::drop_health_mapping(&drop_type),
+            drop_type: drop_type,
+            width: 8.0,
+            height: 8.0,
+            velocity: 2.0,
+        }
+    }
 }
 
-#[derive(Default, Debug)]
-pub struct Velocity(pub f32);
-
-impl Component for Velocity {
+impl Component for DropValue {
     type Storage = DenseVecStorage<Self>;
 }
 

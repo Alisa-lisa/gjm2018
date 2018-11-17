@@ -30,7 +30,7 @@ pub fn spawn_paddle(world: &mut World, sprite_sheet: SpriteSheetHandle) {
     player_paddle.translation = Vector3::new(x, 0.0 + 2.5, 0.0);
     
     let sprite_render = SpriteRender {
-        sprite_sheet: sprite_sheet.clone(),
+        sprite_sheet: sprite_sheet,
         sprite_number: 0,
         flip_horizontal: false,
         flip_vertical: false,
@@ -43,6 +43,25 @@ pub fn spawn_paddle(world: &mut World, sprite_sheet: SpriteSheetHandle) {
         .build();
 }
 
+// TODO: make variable by type and velocity
+pub fn spawn_drop(world: &mut World, sprite_sheet: SpriteSheetHandle) {
+    let mut drop_obj = Transform::default();
+    let y = ARENA_HEIGHT - 4.0;
+    drop_obj.translation = Vector3::new(RNG.lock().unwrap().gen_range(4.0, 796.0), y, 0.0);
+    
+    let sprite_render = SpriteRender {
+        sprite_sheet: sprite_sheet,
+        sprite_number: 1,
+        flip_horizontal: false,
+        flip_vertical: false,
+    };
+    
+    world.create_entity()
+        .with(sprite_render)
+        .with(components::DropValue::new(components::DropType::Water))
+        .with(drop_obj)
+        .build();
+}
 
 pub fn initialise_camera(world: &mut World) {
     // represents camera's position. It's in 3d space

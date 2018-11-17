@@ -1,7 +1,7 @@
 use amethyst::core::Transform;
 use amethyst::ecs::{Join, Read, ReadStorage, System, WriteStorage};
 use amethyst::input::InputHandler;
-use components::{Position, Side, Health, HealthState, DropType, Velocity, Paddle};
+use components::{DropValue, Side, Health, HealthState, DropType, Paddle};
 use entities::{ARENA_WIDTH};
 
 
