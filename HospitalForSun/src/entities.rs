@@ -24,14 +24,6 @@ lazy_static! {
 pub const ARENA_HEIGHT: f32 = 100.0;
 pub const ARENA_WIDTH: f32 = 100.0;
 
-pub fn spawn_sun(world: &mut World) {
-    world.create_entity()
-        .with(components::Health{amount: 1000})
-        .with(components::HealthState::Healthy)
-        .with(components::Position{x: 500.0, y: 50.0})
-        .build();
-}
-
 pub fn spawn_paddle(world: &mut World, sprite_sheet: SpriteSheetHandle) {
     let mut player_paddle = Transform::default();
     let x = ARENA_WIDTH / 2.0;
@@ -41,7 +33,7 @@ pub fn spawn_paddle(world: &mut World, sprite_sheet: SpriteSheetHandle) {
         sprite_sheet: sprite_sheet.clone(),
         sprite_number: 0,
         flip_horizontal: false,
-        flip_vertical: true,
+        flip_vertical: false,
     };
     
     world.create_entity()
@@ -51,14 +43,6 @@ pub fn spawn_paddle(world: &mut World, sprite_sheet: SpriteSheetHandle) {
         .build();
 }
 
-pub fn spawn_drop(world: &mut World, rng: &mut SmallRng, drop: components::DropType){
-    world.create_entity()
-        .with(components::Position{x: rng.gen_range(0.0, 800.0), y: 5.0})
-        .with(components::Velocity{0: rng.gen_range(0.5, 3.0)})
-        .with(components::Health{amount: utils::drop_health_mapping(drop)})
-        .with(components::Velocity{0: rng.gen_range(1.0, 5.0)})
-        .build();
-}
 
 pub fn initialise_camera(world: &mut World) {
     // represents camera's position. It's in 3d space
@@ -77,7 +61,7 @@ pub fn initialise_camera(world: &mut World) {
 }
 
 pub fn load_sprite_sheet(world: &mut World) -> SpriteSheetHandle {
-        // Load the sprite sheet necessary to render the graphics.
+    // Load the sprite sheet necessary to render the graphics.
     // The texture is the pixel data
     // `sprite_sheet` is the layout of the sprites on the image
     // `texture_handle` is a cloneable reference to the texture
