@@ -51,7 +51,7 @@ impl DropValue {
             drop_type: drop_type,
             width: 8.0,
             height: 8.0,
-            velocity: 2.0,
+            velocity: 10.0,
         }
     }
 }

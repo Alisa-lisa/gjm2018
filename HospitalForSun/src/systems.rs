@@ -1,4 +1,4 @@
-use amethyst::core::Transform;
+use amethyst::core::{Transform, Time};
 use amethyst::ecs::{Join, Read, ReadStorage, System, WriteStorage};
 use amethyst::input::InputHandler;
 use components::{DropValue, Side, Health, HealthState, DropType, Paddle};
@@ -26,5 +26,22 @@ impl<'s> System<'s> for PaddleMovement {
                     .max(8.0);
             }
         }
+    }
+}
+
+pub struct DropFall;
+
+impl<'s> System<'s> for DropFall {
+    type SystemData = (
+        WriteStorage<'s, Transform>,
+        ReadStorage<'s, DropValue>,
+        Read<'s, Time>
+    );
+
+    fn run(&mut self, (mut pos, drops, time): Self::SystemData) {
+        for (d, p) in (&drops, &mut pos).join() {
+            p.translation[1] -= d.velocity * time.delta_seconds();
+        }
+        
     }
 }

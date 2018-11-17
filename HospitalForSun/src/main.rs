@@ -50,7 +50,8 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(RenderBundle::new(pipe, Some(config)).with_sprite_sheet_processor())?
         .with_bundle(TransformBundle::new())?
         .with_bundle(input_bundle)?
-        .with(systems::PaddleMovement, "paddle_system", &["input_system"]);
+        .with(systems::PaddleMovement, "paddle_system", &["input_system"])
+        .with(systems::DropFall, "drop_system", &[]);
     let mut game = Application::new("./", Pong, game_data)?;
     game.run();
 
