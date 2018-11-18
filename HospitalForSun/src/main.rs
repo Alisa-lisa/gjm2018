@@ -52,7 +52,8 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(input_bundle)?
         .with(systems::PaddleMovement, "player_system", &["input_system"])
         .with(systems::DropFall, "drop_system", &[])
-        .with(systems::Collide, "boom_system", &["player_system", "drop_system"]);
+        .with(systems::Collide, "boom_system", &["player_system", "drop_system"])
+        .with(systems::SunAppearance, "sick_sun_system", &[]);
     let mut game = Application::new("./", Pong, game_data)?;
     game.run();
 

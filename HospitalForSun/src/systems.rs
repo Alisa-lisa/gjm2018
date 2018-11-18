@@ -1,8 +1,11 @@
 use amethyst::core::{Transform, Time};
 use amethyst::ecs::{Join, Read, ReadStorage, System, WriteStorage, Entities};
 use amethyst::input::InputHandler;
-use components::{DropValue, Side, Health, HealthState, DropType, Paddle};
-use entities::{ARENA_WIDTH};
+
+use rand::prelude::*;
+
+use components::{Side, HealthState, DropType, Paddle, DropValue, Sun};
+use entities::{ARENA_WIDTH, RNG};
 use utils;
 
 pub struct PaddleMovement;
@@ -73,6 +76,40 @@ impl<'s> System<'s> for Collide {
                 }
             }
 
+        }
+    }
+}
+
+pub struct SunAppearance;
+
+impl<'s> System<'s> for SunAppearance {
+    type SystemData = (
+            WriteStorage<'s, Sun>,
+            Read<'s, Time>
+        );
+
+    fn run(&mut self, (mut sun, time): Self::SystemData) {
+        for s in (&mut sun).join() {
+            // by chance sun can start feeling hot or cold -> from 500
+            if s.health == 500 {
+                let sickness_chance = RNG.lock().unwrap().gen_bool(1.0 / 6.0);
+                if sickness_chance {
+                    let sickness_direction = RNG.lock().unwrap().choose(&[-1.0, 1.0]).unwrap();
+                    s.health += *sickness_direction as i32;
+                }
+            }
+            // if one direction is chosen it will progress with the time
+            else if s.health < 500 {
+                s.health -= (1.0 * time.delta_seconds()) as i32;
+            }
+            else if s.health > 500 {
+                s.health += (1.0 * time.delta_seconds()) as i32;
+            }
+            // get actual health_state and assign it to the sun
+            s.health_state = utils::get_health_state(s.health);
+            
+            // a caught drop should restore according amount
+            // TODO
         }
     }
 }

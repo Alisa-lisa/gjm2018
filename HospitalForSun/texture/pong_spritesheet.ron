@@ -8,11 +8,48 @@
             width: 16.0,
             height: 4.0,
         ),
+	// water drop
 	(
 		x: 0.0,
 		y: 4.0,
 		width: 8.0,
 		height: 8.0,
-	)
+	),
+	// base sun
+	(
+		x: 0.0,
+		y: 12.0,
+		width: 16.0,
+		height: 16.0,
+	),
+	// hot sun
+	(
+		x: 0.0,
+		y: 28.0,
+		width: 16.0,
+		height: 16.0,
+	),
+	// fever sun
+	(
+		x: 0.0,
+		y: 44.0,
+		width: 16.0,
+		height: 16.0
+	),
+	// cold sun
+	(
+		x: 16.0,
+		y: 12.0,
+		width: 16.0,
+		height: 16.0,
+	),
+	// freezing sun
+	(
+		x: 32.0,
+		y: 28.0,
+		width: 16.0,
+		height:16.0,
+	),
+
     ],
 )

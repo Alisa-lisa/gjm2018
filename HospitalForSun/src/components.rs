@@ -1,26 +1,35 @@
 use amethyst::ecs::{Component, VecStorage, DenseVecStorage};
 use utils;
 
-#[derive(Default, Debug)]
-pub struct Health {
-    pub amount: i32,
-}
-
-impl Component for Health {
-    type Storage = VecStorage<Self>;
-}
-
-#[derive(Debug)]
+#[derive(PartialEq, Eq)]
 pub enum HealthState {
     Dead,
     Freezing,
     Cold,
     Healthy,
-    Warm,
     Hot,
+    Fever,
 }
 
 impl Component for HealthState {
+    type Storage = DenseVecStorage<Self>;
+}
+
+pub struct Sun {
+    pub health: i32,
+    pub health_state: HealthState,
+}
+
+impl Sun {
+    pub fn new(health_state: HealthState) -> Sun {
+        Sun {
+            health: 500,
+            health_state: HealthState::Healthy,
+        }
+    }
+}
+
+impl Component for Sun {
     type Storage = DenseVecStorage<Self>;
 }
 

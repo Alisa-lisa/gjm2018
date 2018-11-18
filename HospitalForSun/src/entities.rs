@@ -18,7 +18,7 @@ use components;
 use utils;
 
 lazy_static! {
-    static ref RNG: Mutex<SmallRng> = Mutex::new(SmallRng::from_rng(thread_rng()).unwrap());
+    pub static ref RNG: Mutex<SmallRng> = Mutex::new(SmallRng::from_rng(thread_rng()).unwrap());
 }
 
 pub const ARENA_HEIGHT: f32 = 100.0;
@@ -47,8 +47,8 @@ pub fn spawn_paddle(world: &mut World, sprite_sheet: SpriteSheetHandle) {
 pub fn spawn_drop(world: &mut World, sprite_sheet: SpriteSheetHandle) {
     let mut drop_obj = Transform::default();
     let y = ARENA_HEIGHT - 4.0;
-    //drop_obj.translation = Vector3::new(RNG.lock().unwrap().gen_range(4.0, 496.0), y, 0.0);
-    drop_obj.translation = Vector3::new(30.0, 50.0, 0.0);
+    drop_obj.translation = Vector3::new(RNG.lock().unwrap().gen_range(4.0, 80.0), 80.0, 0.0);
+    //drop_obj.translation = Vector3::new(30.0, 50.0, 0.0);
     
     let sprite_render = SpriteRender {
         sprite_sheet: sprite_sheet,
@@ -61,6 +61,25 @@ pub fn spawn_drop(world: &mut World, sprite_sheet: SpriteSheetHandle) {
         .with(sprite_render)
         .with(components::DropValue::new(components::DropType::Water))
         .with(drop_obj)
+        .build();
+}
+
+pub fn spawn_sun(world: &mut World, sprite_sheet: SpriteSheetHandle) {
+    let mut sun = Transform::default();
+    //sun.translation = Vector3::new(ARENA_WIDTH - 16.0, ARENA_HEIGHT - 16.0, 0.0);
+    sun.translation = Vector3::new(85.0, 85.0, 0.0);
+    
+    let sprite_render = SpriteRender {
+        sprite_sheet: sprite_sheet,
+        sprite_number: utils::sun_sprite_mapping(&components::HealthState::Healthy),
+        flip_horizontal: false,
+        flip_vertical: false,
+    };
+    
+    world.create_entity()
+        .with(sprite_render)
+        .with(components::Sun::new(components::HealthState::Healthy))
+        .with(sun)
         .build();
 }
 
