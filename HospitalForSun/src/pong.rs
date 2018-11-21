@@ -16,7 +16,7 @@ impl<'a, 'b> SimpleState<'a, 'b> for Pong {
         
         entities::spawn_paddle(world, sprite_sheet_handle.clone());
         entities::spawn_drop(world, sprite_sheet_handle.clone());
-        entities::spawn_sun(world, sprite_sheet_handle);
+        entities::spawn_sun(world, sprite_sheet_handle, 500);
         entities::initialise_camera(world);
     }
 }

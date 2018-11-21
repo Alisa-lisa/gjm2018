@@ -1,11 +1,11 @@
 use amethyst::core::{Transform, Time};
 use amethyst::ecs::{Join, Read, ReadStorage, System, WriteStorage, Entities};
 use amethyst::input::InputHandler;
-
+use amethyst::prelude::*;
 use rand::prelude::*;
 
 use components::{Side, HealthState, DropType, Paddle, DropValue, Sun};
-use entities::{ARENA_WIDTH, RNG};
+use entities;
 use utils;
 
 pub struct PaddleMovement;
@@ -25,7 +25,7 @@ impl<'s> System<'s> for PaddleMovement {
             if let Some(mv) = movement {
                 let amount = 1.2 * mv as f32;
                 t.translation[0] = (t.translation[0] + amount)
-                    .min(ARENA_WIDTH - 8.0)
+                    .min(entities::ARENA_WIDTH - 8.0)
                     .max(8.0);
             }
         }
@@ -85,16 +85,17 @@ pub struct SunAppearance;
 impl<'s> System<'s> for SunAppearance {
     type SystemData = (
             WriteStorage<'s, Sun>,
-            Read<'s, Time>
+            Read<'s, Time>,
         );
 
     fn run(&mut self, (mut sun, time): Self::SystemData) {
+        let mut new_health = 500;
         for s in (&mut sun).join() {
             // by chance sun can start feeling hot or cold -> from 500
             if s.health == 500 {
-                let sickness_chance = RNG.lock().unwrap().gen_bool(1.0 / 6.0);
+                let sickness_chance = entities::RNG.lock().unwrap().gen_bool(1.0 / 6.0);
                 if sickness_chance {
-                    let sickness_direction = RNG.lock().unwrap().choose(&[-1.0, 1.0]).unwrap();
+                    let sickness_direction = entities::RNG.lock().unwrap().choose(&[-1.0, 1.0]).unwrap();
                     s.health += *sickness_direction as i32;
                 }
             }
@@ -105,11 +106,7 @@ impl<'s> System<'s> for SunAppearance {
             else if s.health > 500 {
                 s.health += (1.0 * time.delta_seconds()) as i32;
             }
-            // get actual health_state and assign it to the sun
             s.health_state = utils::get_health_state(s.health);
-            
-            // a caught drop should restore according amount
-            // TODO
         }
     }
 }

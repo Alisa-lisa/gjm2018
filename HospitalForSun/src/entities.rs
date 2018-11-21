@@ -64,21 +64,22 @@ pub fn spawn_drop(world: &mut World, sprite_sheet: SpriteSheetHandle) {
         .build();
 }
 
-pub fn spawn_sun(world: &mut World, sprite_sheet: SpriteSheetHandle) {
+
+pub fn spawn_sun(world: &mut World, sprite_sheet: SpriteSheetHandle, health: i32) {
     let mut sun = Transform::default();
     //sun.translation = Vector3::new(ARENA_WIDTH - 16.0, ARENA_HEIGHT - 16.0, 0.0);
     sun.translation = Vector3::new(85.0, 85.0, 0.0);
-    
+    let health_state = utils::get_health_state(health);
     let sprite_render = SpriteRender {
         sprite_sheet: sprite_sheet,
-        sprite_number: utils::sun_sprite_mapping(&components::HealthState::Healthy),
+        sprite_number: utils::sun_sprite_mapping(&health_state),
         flip_horizontal: false,
         flip_vertical: false,
     };
     
     world.create_entity()
         .with(sprite_render)
-        .with(components::Sun::new(components::HealthState::Healthy))
+        .with(components::Sun::new(health_state))
         .with(sun)
         .build();
 }
